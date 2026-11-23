@@ -30,7 +30,7 @@ export const FARM_TEMPLATES: Record<string, FarmTemplate> = {
   // ---------------------------------------------------------------- Dexs
   // AMM / order-book DEX: swap, them LP, claim phi, vote gauge.
   Dexs: [
-    "Nạp 100 USDC + 0.05 ETH làm gas vào ví trên {chain} rồi mở {name}, swap 50 USDC sang token của pool chính; tốn ~50 đô vốn + 0.3–1 đô gas, mất 5 phút.",
+    "Nạp 100 USDC vào ví trên {chain} (giữ lại ~5 đô token gas của chain đó) rồi mở {name}, swap 50 USDC sang token của pool chính; tốn ~50 đô vốn + 0.3–1 đô gas, mất 5 phút.",
     "Thêm thanh khoản 50 USDC + lượng token tương đương vào pool {name} trên {chain}, chọn biên độ giá hẹp (±10%) để phí cao hơn; tốn ~50 đô vốn, mất 10 phút, giữ tối thiểu 7 ngày.",
     "Mỗi tuần vào {name} claim phí giao dịch đã tích lũy rồi gộp lại vào cùng pool; tốn 0.5–2 đô gas mỗi lần, mất 5 phút/lần, làm 4 tuần liên tiếp.",
     "Swap ngược 25 USDC qua một cặp pool khác trên {name} để tạo volume ở 2 pool thay vì 1; tốn ~25 đô vốn luân chuyển + 0.5–1 đô gas, mất 5 phút.",
@@ -283,6 +283,164 @@ export const FARM_TEMPLATES: Record<string, FarmTemplate> = {
     "Mint thêm 50 USDC tài sản tổng hợp khác loại trên {name} sau 7 ngày để đa dạng; tốn ~50 đô vốn + 1–3 đô gas, mất 10 phút.",
     "Đốt (burn) một nửa tài sản tổng hợp trên {name} sau 14 ngày để rút thế chấp, rồi mint lại sau 3 ngày; tốn ~25 đô vốn luân chuyển + 1–3 đô gas, mất 10 phút.",
     "Dùng tài sản tổng hợp của {name} để giao dịch trên DEX của {chain} với 20 USDC, kiểm tra trượt giá trước; tốn ~20 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+  ],
+
+  // ------------------------------------------------------------ Risk Curators
+  // Nha quan ly rui ro (curator) quan ly vault cho vay: nap vault cua curator,
+  // so sanh curator, chia von giua 2 vault, claim thuong, doi curator.
+  "Risk Curators": [
+    "Nạp 100 USDC vào vault của {name} trên {chain}, chọn vault do curator quản lý có lịch sử rõ ràng và phí hiệu suất dưới 10%; tốn ~100 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Chia 100 USDC còn lại sang vault thứ hai của {name} do một curator khác quản lý để so sánh lợi nhuận 2 curator; tốn ~100 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Mỗi tuần kiểm tra tỉ lệ sử dụng vốn và lợi nhuận thực của từng vault {name}, ghi lại APY tuần; tốn 0 đô khi chỉ kiểm tra, mất 5 phút/lần.",
+    "Chuyển 50 USDC từ vault lợi nhuận thấp sang vault lợi nhuận cao hơn của {name} sau 14 ngày nếu chênh lệch APY trên 2%; tốn 1–3 đô gas, mất 10 phút.",
+    "Claim phần thưởng curator (nếu {name} có) mỗi 2 tuần rồi nạp lại vào cùng vault để lãi kép; tốn 0.5–2 đô gas/lần, mất 5 phút/lần.",
+    "Đọc báo cáo rủi ro của curator trên {name} (nó cho vay thị trường nào, tỉ lệ thế chấp bao nhiêu) trước khi nạp thêm tiền lớn; tốn 0 đô, mất 15 phút đọc.",
+    "Rút một nửa khỏi vault {name} sau 30 ngày rồi nạp lại sau 3 ngày để ghi nhận 1 chu kỳ rút/nạp; tốn ~50 đô vốn luân chuyển + 1–3 đô gas, mất 10 phút.",
+  ],
+
+  // ------------------------------------------------- Onchain Capital Allocator
+  // Bo phan bo von onchain: nap vault phan bo, chon chien luoc, theo doi phan bo.
+  "Onchain Capital Allocator": [
+    "Nạp 100 USDC vào vault phân bổ vốn của {name} trên {chain}, chọn chiến lược có mô tả rõ ràng (ví dụ lending, basis hay LP) và thời gian khóa; tốn ~100 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Mỗi tuần kiểm tra bảng phân bổ của {name} xem vốn đang nằm ở chiến lược nào và lợi nhuận từng phần; tốn 0 đô khi chỉ kiểm tra, mất 5 phút/lần.",
+    "Nạp thêm 50 USDC vào {name} sau 7 ngày khi đã thấy phân bổ chạy ổn định 1 tuần; tốn ~50 đô vốn + 0.5–2 đô gas, mất 5 phút.",
+    "Chuyển 50 USDC từ chiến lược lợi nhuận thấp sang chiến lược khác của {name} (nếu cho đổi) sau 14 ngày; tốn 1–3 đô gas, mất 10 phút.",
+    "Claim phần thưởng phân bổ trên {name} mỗi 2 tuần rồi nạp lại vào cùng vault để lãi kép; tốn 0.5–2 đô gas/lần, mất 5 phút/lần.",
+    "Rút toàn bộ khỏi 1 chiến lược của {name} sau 30 ngày, giữ lại chiến lược còn chạy để so sánh lợi nhuận; tốn 1–3 đô gas, mất 10 phút.",
+  ],
+
+  // ------------------------------------------------------------ Basis Trading
+  // Giao dich basis (mua spot + short perp): nap vault basis, theo doi funding.
+  "Basis Trading": [
+    "Nạp 100 USDC vào vault basis của {name} trên {chain}, đọc kỹ chiến lược basis (mua spot + short perp) và mức funding kỳ vọng; tốn ~100 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Giữ tiền trong vault {name} ít nhất 21 ngày để đi qua đủ chu kỳ funding (thường tính theo 8 giờ); tốn 0 đô khi chỉ giữ, mất 5 phút/tuần kiểm tra.",
+    "Mỗi tuần kiểm tra funding rate thực nhận trên {name}, nếu funding âm 2 tuần liên tiếp thì cân nhắc rút một nửa; tốn 0 đô khi chỉ kiểm tra, mất 5 phút/lần.",
+    "Nạp thêm 50 USDC vào vault basis thứ hai của {name} (cặp tài sản khác) sau 7 ngày để đa dạng basis; tốn ~50 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Claim lợi nhuận basis trên {name} mỗi 2 tuần rồi nạp lại vào cùng vault để lãi kép; tốn 0.5–2 đô gas/lần, mất 5 phút/lần.",
+    "Rút 50 USDC khỏi vault {name} sau 30 ngày rồi nạp lại sau 3 ngày để ghi nhận 1 chu kỳ rút/nạp; tốn ~50 đô vốn luân chuyển + 1–3 đô gas, mất 10 phút.",
+  ],
+
+  // --------------------------------------------------------------------- Chain
+  // Chuoi L1/L2: bridge sang chain, dung app goc, stake token goc, LP tren DEX goc.
+  Chain: [
+    "Bridge 50 USDC từ Ethereum sang {chain} qua cầu nối chính thức của chain (hoặc cầu {name} hỗ trợ), giữ lại 5 đô làm gas; tốn ~50 đô vốn + 1–3 đô phí bridge, mất 10–20 phút.",
+    "Dùng 25 USDC trên {chain} để thử 1 app gốc của chain qua {name} (ví dụ swap trên DEX gốc hoặc supply lên lending gốc); tốn ~25 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Stake 25 USDC token gốc của {chain} qua {name} (nếu có staking) để vừa hưởng lãi vừa ghi nhận hoạt động staking, giữ ít nhất 14 ngày; tốn ~25 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Cung cấp 25 USDC thanh khoản vào pool chính trên DEX gốc của {chain} qua {name}, giữ 14 ngày rồi kiểm tra phí thu được; tốn ~25 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Mỗi tuần làm 1 giao dịch nhỏ 10–20 USDC trên {chain} qua {name} (đổi app hoặc đổi cặp), làm 4 tuần để hoạt động đều theo thời gian; tốn ~15 đô vốn luân chuyển/tuần + 0.5–2 đô gas/lần, mất 10 phút/lần.",
+    "Rút một nửa tài sản khỏi {chain} về Ethereum qua cầu nối sau 30 ngày rồi bridge lại sau 3 ngày để ghi nhận chu kỳ đi/về; tốn ~25 đô vốn luân chuyển + 1–3 đô phí, mất 15 phút.",
+  ],
+
+  // -------------------------------------------------------------------- CeDeFi
+  // CeFi + DeFi: nap tien huong loi suat CeFi tren onchain, doi san pham.
+  CeDeFi: [
+    "Nạp 100 USDC vào {name} trên {chain} để hưởng lợi suất kiểu CeFi trên onchain, đọc kỹ đơn vị lưu ký và tài sản đảm bảo trước khi nạp; tốn ~100 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Giữ tiền trong {name} ít nhất 30 ngày để nhận đủ 1 chu kỳ trả lãi (thường trả theo tháng); tốn 0 đô khi chỉ giữ, mất 5 phút/tuần kiểm tra.",
+    "Nạp thêm 50 USDC vào sản phẩm thứ hai của {name} (ví dụ kỳ hạn khác) sau 14 ngày để đa dạng kỳ hạn; tốn ~50 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Rút 50 USDC khỏi {name} sau 30 ngày khi hết 1 kỳ hạn rồi nạp lại sau 3 ngày để ghi nhận 1 chu kỳ rút/nạp; tốn ~50 đô vốn luân chuyển + 1–3 đô gas, mất 10 phút.",
+    "Claim lãi CeDeFi trên {name} mỗi tháng rồi nạp lại vào cùng sản phẩm để lãi kép; tốn 0.5–2 đô gas/lần, mất 5 phút/lần.",
+  ],
+
+  // ----------------------------------------------------------------- Anchor BTC
+  // BTC neo gia: nap BTC/wBTC, mint san pham BTC neo, dung trong DeFi, doi lai.
+  "Anchor BTC": [
+    "Nạp 0.005 BTC (khoảng 300 đô) vào {name} trên {chain} để mint token BTC neo giá, giữ lại 5 đô token gas của chain; tốn ~300 đô vốn + 1–3 đô gas, mất 10 phút.",
+    "Mang token BTC neo của {name} đi supply vào lending trên {chain} để vừa giữ giá BTC vừa hưởng lãi, giữ ít nhất 14 ngày; tốn 0.5–2 đô gas, mất 10 phút.",
+    "Cung cấp 100 USDC token BTC neo của {name} + 100 USDC BTC vào pool trên DEX của {chain}, giữ 14 ngày rồi kiểm tra phí; tốn ~100 đô vốn + 1–3 đô gas, mất 10 phút.",
+    "Mỗi tuần kiểm tra tỉ giá token BTC neo của {name} so với BTC thật, nếu lệch quá 0.5% thì cân nhắc đổi về BTC; tốn 0 đô khi chỉ kiểm tra, mất 5 phút/lần.",
+    "Đổi một nửa token BTC neo về BTC trên {name} sau 30 ngày rồi mint lại sau 3 ngày để ghi nhận 1 chu kỳ đổi/mint; tốn ~150 đô vốn luân chuyển + 1–3 đô gas, mất 10 phút.",
+  ],
+
+  // --------------------------------------------------------- Leveraged Farming
+  // Farm don bay: nap the chap, mo vi the farm don bay, giu health factor.
+  "Leveraged Farming": [
+    "Nạp 100 USDC làm thế chấp lên {name} trên {chain}, mở 1 vị thế farm đòn bẩy 2x trị giá 100 USDC (50 USDC vốn + 50 USDC vay), đặt ngưỡng an toàn rõ ràng; tốn ~100 đô vốn + 1–3 đô gas, mất 15 phút.",
+    "Mỗi 3 ngày kiểm tra health factor của vị thế farm trên {name}, nếu xuống dưới 1.5 thì trả nợ hoặc nạp thêm thế chấp ngay; tốn 0 đô khi chỉ kiểm tra, mất 2 phút/lần.",
+    "Claim phần thưởng farm trên {name} mỗi tuần rồi bán một nửa, nạp lại một nửa vào cùng vị thế để lãi kép; tốn 0.5–2 đô gas/lần, mất 5 phút/lần.",
+    "Giảm đòn bẩy xuống 1.5x trên {name} sau 14 ngày bằng cách trả 25 USDC nợ vay, giữ vị thế an toàn hơn; tốn ~25 đô vốn + 1–3 đô gas, mất 10 phút.",
+    "Đóng vị thế farm đòn bẩy trên {name} sau 30 ngày: trả hết nợ vay, rút toàn bộ thế chấp về ví; tốn 1–3 đô gas, mất 10 phút.",
+    "Mở lại 1 vị thế farm nhỏ hơn (50 USDC, đòn bẩy 2x) trên {name} sau 3 ngày để ghi nhận chu kỳ đóng/mở; tốn ~50 đô vốn + 1–3 đô gas, mất 10 phút.",
+  ],
+
+  // ------------------------------------------------------ Dual-Token Stablecoin
+  // Stablecoin 2 token: mint stable, stake token tiet kiem, doi qua lai 2 token.
+  "Dual-Token Stablecoin": [
+    "Nạp 100 USDC vào {name} trên {chain} để mint 100 stablecoin của protocol, giữ lại 5 đô làm gas; tốn ~100 đô vốn + 0.5–2 đô gas, mất 5 phút.",
+    "Stake 50 stablecoin vừa mint từ {name} vào token tiết kiệm của protocol để hưởng lãi suất tiết kiệm, giữ 50 còn lại trong ví; tốn 0.5–2 đô gas, mất 10 phút, giữ ít nhất 14 ngày.",
+    "Đổi 25 stablecoin sang token tiết kiệm của {name} rồi đổi ngược lại sau 7 ngày để ghi nhận cả 2 chiều đổi; tốn ~25 đô vốn luân chuyển + 1–3 đô gas, mất 10 phút.",
+    "Mỗi tuần kiểm tra tỉ giá stablecoin của {name} so với 1 đô và lãi suất tiết kiệm, nếu stable lệch quá 0.5% thì đổi sang USDC; tốn 0 đô khi chỉ kiểm tra, mất 2 phút/lần.",
+    "Rút toàn bộ khỏi {name} sau 30 ngày: unstake token tiết kiệm, đổi hết stablecoin về USDC; tốn 1–3 đô gas, mất 10 phút.",
+  ],
+
+  // ----------------------------------------------------------- Decentralized BTC
+  // BTC phi tap trung: bridge BTC sang dang phi tap trung, dung trong DeFi, doi ve.
+  "Decentralized BTC": [
+    "Bridge 0.005 BTC (khoảng 300 đô) sang dạng BTC phi tập trung của {name} trên {chain}, giữ lại 5 đô token gas của chain; tốn ~300 đô vốn + 1–3 đô phí bridge, mất 15–30 phút.",
+    "Mang BTC phi tập trung của {name} đi supply vào lending trên {chain} để hưởng lãi mà vẫn giữ giá BTC, giữ ít nhất 14 ngày; tốn 0.5–2 đô gas, mất 10 phút.",
+    "Cung cấp 100 USDC BTC phi tập trung của {name} + 100 USDC BTC vào pool trên DEX của {chain}, giữ 14 ngày; tốn ~100 đô vốn + 1–3 đô gas, mất 10 phút.",
+    "Mỗi tuần kiểm tra tỉ giá BTC phi tập trung của {name} so với BTC thật, nếu lệch quá 0.5% thì cân nhắc đổi về; tốn 0 đô khi chỉ kiểm tra, mất 5 phút/lần.",
+    "Đổi một nửa BTC phi tập trung về BTC gốc qua {name} sau 30 ngày rồi bridge lại sau 3 ngày để ghi nhận chu kỳ đi/về; tốn ~150 đô vốn luân chuyển + 1–3 đô phí, mất 15 phút.",
+  ],
+
+  // ---------------------------------------------------------- Collateral Markets
+  // Thi truong the chap restaking: nap the chap, chon mang luoi, nhan thuong.
+  "Collateral Markets": [
+    "Nạp 0.05 ETH (khoảng 150 đô) làm tài sản thế chấp lên {name} trên {chain}, giữ lại 0.01 ETH làm gas; tốn ~150 đô vốn + 1–3 đô gas, mất 10 phút.",
+    "Chọn 2–3 mạng lưới (network) trên {name} để ủy quyền thế chấp cho cả 3 thay vì chỉ 1, đọc kỹ điều kiện slashing của từng mạng; tốn 1–3 đô gas, mất 15 phút.",
+    "Giữ vị thế thế chấp trên {name} ít nhất 30 ngày, mỗi tuần kiểm tra phần thưởng từng mạng đã tích lũy; tốn 0 đô khi chỉ kiểm tra, mất 5 phút/lần.",
+    "Nạp thêm 0.02 ETH thế chấp trên {name} sau 14 ngày để tăng tổng lượng thế chấp theo từng đợt; tốn ~60 đô vốn + 1–3 đô gas, mất 5 phút.",
+    "Rút 0.01 ETH khỏi thế chấp trên {name} sau 21 ngày rồi nạp lại sau 3 ngày để ghi nhận chu kỳ rút/nạp; tốn ~30 đô vốn luân chuyển + 2–4 đô gas, mất 10 phút, chờ rút 1–7 ngày.",
+    "Claim phần thưởng restaking trên {name} mỗi 2 tuần rồi nạp lại vào thế chấp để lãi kép; tốn 0.5–2 đô gas/lần, mất 5 phút/lần.",
+  ],
+
+  // ---------------------------------------------------------- Stablecoin Wrapper
+  // Goi stablecoin: wrap stable, dung ban wrap trong DeFi, unwrap/wrap lai.
+  "Stablecoin Wrapper": [
+    "Nạp 100 USDC vào {name} trên {chain} để wrap thành 100 stablecoin đã gói của protocol, giữ lại 5 đô làm gas; tốn ~100 đô vốn + 0.5–2 đô gas, mất 5 phút.",
+    "Mang 50 stablecoin đã gói của {name} đi supply vào lending trên {chain} để hưởng lãi, giữ 50 còn lại trong ví; tốn 0.5–2 đô gas, mất 10 phút, giữ ít nhất 14 ngày.",
+    "Cung cấp 50 USDC stablecoin đã gói của {name} + 50 USDC vào pool trên DEX của {chain}, giữ 14 ngày; tốn ~50 đô vốn + 1–3 đô gas, mất 10 phút.",
+    "Unwrap 50 stablecoin đã gói về USDC trên {name} sau 14 ngày rồi wrap lại sau 3 ngày để ghi nhận chu kỳ unwrap/wrap; tốn ~50 đô vốn luân chuyển + 1–3 đô gas, mất 10 phút.",
+    "Mỗi tuần kiểm tra tỉ giá stablecoin đã gói của {name} so với 1 đô, nếu lệch quá 0.5% thì đổi sang USDC; tốn 0 đô khi chỉ kiểm tra, mất 2 phút/lần.",
+  ],
+
+  // ------------------------------------------------------- Governance Incentives
+  // Khuyen khich quan tri: khoa/bau, nhan bribe, bau hang tuan, claim, bau lai.
+  "Governance Incentives": [
+    "Nạp 50 USDC vào {name} trên {chain} để khóa token quản trị (nếu có) hoặc đăng ký nhận khuyến khích quản trị, giữ lại 5 đô làm gas; tốn ~50 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Bỏ phiếu quản trị 1 lần trên {name} cho đề xuất đang mở, chọn đề xuất có phần thưởng khuyến khích hiển thị; tốn 0.5–1 đô gas, mất 5 phút.",
+    "Mỗi tuần bỏ phiếu 1 lần trên {name} cho đề xuất mới (mỗi epoch 7 ngày vote 1 lần) để có lịch sử vote đều 4 tuần; tốn 0.5–1 đô gas/lần, mất 5 phút/lần.",
+    "Claim phần thưởng khuyến khích (bribe) trên {name} mỗi 2 tuần rồi nạp lại vào vị thế khóa; tốn 0.5–2 đô gas/lần, mất 5 phút/lần.",
+    "Đổi phiếu bầu sang đề xuất khác của {name} sau 14 ngày để thử 2 hướng khuyến khích khác nhau; tốn 0.5–1 đô gas, mất 5 phút.",
+  ],
+
+  // ---------------------------------------------------------- Crypto Card Issuer
+  // Phat hanh the crypto: dang ky the, nap tien, chi tieu, nhan hoan tien.
+  "Crypto Card Issuer": [
+    "Đăng ký thẻ crypto của {name} trên {chain}, nạp 50 USDC vào thẻ để kích hoạt, giữ lại 5 đô làm gas; tốn ~50 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Dùng thẻ {name} chi tiêu 20 USDC cho 1 giao dịch nhỏ (ví dụ mua hàng online) để ghi nhận giao dịch thẻ đầu tiên; tốn ~20 đô vốn + 0 đô phí thẻ, mất 5 phút.",
+    "Nạp thêm 30 USDC vào thẻ {name} sau 7 ngày rồi chi tiêu 10 USDC/tuần trong 4 tuần để có lịch sử chi tiêu đều; tốn ~10 đô vốn/tuần, mất 5 phút/lần.",
+    "Kiểm tra hoàn tiền (cashback) trên {name} mỗi tuần, nếu có hoàn tiền thì rút về ví rồi nạp lại vào thẻ; tốn 0 đô, mất 5 phút/lần.",
+    "Đổi hạn mức hoặc nâng cấp thẻ {name} sau 30 ngày nếu đủ điều kiện chi tiêu, ghi lại lịch sử thẻ đầy đủ; tốn 0–5 đô phí nâng cấp, mất 10 phút.",
+  ],
+
+  // ------------------------------------------------------ Uncollateralized Lending
+  // Cho vay khong the chap: xac minh tin dung, vay nho, tra dung han, xay lich su.
+  "Uncollateralized Lending": [
+    "Hoàn tất xác minh tín dụng trên {name} ở {chain} (kết nối ví, xác minh danh tính nếu yêu cầu), giữ lại 5 đô làm gas; tốn 0–2 đô phí xác minh, mất 15 phút.",
+    "Vay 50 USDC không thế chấp trên {name} với hạn mức nhỏ nhất được duyệt, đọc kỹ lãi suất và kỳ hạn trước khi vay; tốn 0.5–2 đô gas, mất 10 phút.",
+    "Trả đúng hạn 25 USDC nợ vay trên {name} sau 7 ngày để xây lịch sử trả nợ tốt, giữ lại 25 USDC còn nợ; tốn ~25 đô vốn + 0.5–2 đô gas, mất 5 phút.",
+    "Trả hết 25 USDC còn lại trên {name} sau 14 ngày, sau đó vay lại 50 USDC để ghi nhận chu kỳ vay/trả thứ hai; tốn ~50 đô vốn luân chuyển + 0.5–2 đô gas, mất 10 phút.",
+    "Mỗi tuần kiểm tra điểm tín dụng và hạn mức trên {name}, nếu hạn mức tăng thì vay thêm 1 khoản nhỏ 20 USDC; tốn ~20 đô vốn + 0.5–2 đô gas, mất 5 phút/lần.",
+  ],
+
+  // ---------------------------------------------------- Interest Rate Derivatives
+  // Phai sinh lai suat: mua/ban vi the lai suat, giu den dao han, phong ngua.
+  "Interest Rate Derivatives": [
+    "Nạp 50 USDC vào {name} trên {chain}, mua 1 vị thế lãi suất (ví dụ lãi cố định) trị giá 50 USDC kỳ hạn 30 ngày, đọc kỹ lãi suất và ngày đáo hạn; tốn ~50 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Giữ vị thế lãi suất trên {name} ít nhất 14 ngày, mỗi tuần kiểm tra lãi suất thị trường so với lãi đã khóa; tốn 0 đô khi chỉ kiểm tra, mất 5 phút/lần.",
+    "Mở thêm 1 vị thế lãi suất ngược chiều 25 USDC trên {name} sau 7 ngày để phòng ngừa biến động lãi suất; tốn ~25 đô vốn + 0.5–2 đô gas, mất 10 phút.",
+    "Đóng sớm 1 vị thế trên {name} sau 21 ngày nếu lãi suất thị trường đã lệch quá 1% so với lúc mở, chốt chênh lệch; tốn 0.5–2 đô gas, mất 5 phút.",
+    "Giữ vị thế còn lại trên {name} đến đáo hạn 30 ngày rồi nhận lãi và gốc về ví, ghi lại lãi thực nhận; tốn 0.5–2 đô gas, mất 5 phút.",
   ],
 };
 
