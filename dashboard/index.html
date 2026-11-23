@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div>
+      <p class="eyebrow">Token launch radar</p>
+      <h1>Protocols still waiting on a token, ranked by what one would be worth</h1>
+      <p class="lede">Implied value is the board&rsquo;s own claim, built from each protocol&rsquo;s TVL, its 7-day growth and how long it has run with no token recorded. Nothing here predicts whether or when a token launches.</p>
+    </div>
+    <dl class="stats" id="stats" aria-label="Board statistics"></dl>
+  </div>
+</header>
+
+<nav class="views" aria-label="Board views">
+  <button type="button" class="view-btn is-active" data-view="board" aria-pressed="true">Pre-token board</button>
+  <button type="button" class="view-btn" data-view="live" aria-pressed="false">Already has a token</button>
+</nav>
+
+<section class="controls" aria-label="Filter and sort">
+  <label class="field field-search">
+    <span>Search</span>
+    <input id="q" type="search" placeholder="Name or slug&hellip;" autocomplete="off">
+  </label>
+  <label class="field">
+    <span>Category</span>
+    <select id="cat"><option value="">All categories</option></select>
+  </label>
+  <label class="field">
+    <span>Chain</span>
+    <select id="chain"><option value="">All chains</option></select>
+  </label>
+  <label class="field">
+    <span>Sort by</span>
+    <select id="sort">
+      <option value="rank">Rank (implied value)</option>
+      <option value="tvl">TVL, high to low</option>
+      <option value="change">7-day change, high to low</option>
+      <option value="age">Age, oldest first</option>
+      <option value="name">Name, A to Z</option>
+    </select>
+  </label>
+  <label class="check" id="watchOnlyWrap" title="Show only the snapshot watchlist">
+    <input type="checkbox" id="watchOnly">
+    <span>Watchlist only</span>
+  </label>
+  <p class="count" id="count" aria-live="polite"></p>
+</section>
+
+<div class="layout">
+  <main class="board-wrap">
+    <table class="board" id="board">
+      <thead>
+        <tr>
+          <th scope="col"><button type="button" data-sort="rank">Rank</button></th>
+          <th scope="col"><button type="button" data-sort="name">Protocol</button></th>
+          <th scope="col" class="num"><button type="button" data-sort="tvl">TVL</button></th>
+          <th scope="col" class="num"><button type="button" data-sort="change">7d</button></th>
+          <th scope="col" class="num"><button type="button" data-sort="value">Implied value</button></th>
+          <th scope="col" class="num"><button type="button" data-sort="age">Age</button></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="empty" id="empty" hidden>No protocol matches these filters. Loosen the search or clear a filter.</p>
+    <p class="note" id="boardNote"></p>
+  </main>
+
+  <aside class="detail" id="detail" aria-live="polite" aria-label="Protocol detail">
+    <p class="detail-hint">Select a row to see the protocol&rsquo;s detail and farm plan.</p>
+  </aside>
+</div>
+
+<footer class="foot">
+  <p id="method"></p>
+  <p>Data: DefiLlama snapshot as of <span id="asOf"></span>. &ldquo;Records no token&rdquo; means the snapshot carries no token for the protocol — not proof it has none. Farm steps are a starting plan, not advice; check the protocol&rsquo;s own pages before moving money.</p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
